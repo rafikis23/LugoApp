@@ -604,52 +604,59 @@ function detailCategoria(codigoCategoria){
  function cambiarUsuario () {
     let usuarioActual = document.getElementById('usuarioSeleccionado').value;
     document.getElementById('texto-bienvenida').innerHTML = `¡Hola ${usuariosLugo[usuarioActual].nombre}!`;
+    return usuarioActual;
 }
 
 // Funcion para ver Ver las ordenes de cada usuario
 function verOrdenes() {
-    let usuarioSeleccionado = document.getElementById('usuarioSeleccionado').value;
-    console.log(usuarioSeleccionado);
+    let usuario = cambiarUsuario();
+    console.log(usuario);
+    console.log(usuariosLugo[usuario].nombre);
     $('#modalUser').modal('show');
-    document.getElementById('modalUserLabel').innerHTML = `${usuariosLugo[usuarioSeleccionado].nombre}, Estas son tus ordenes`;
+    document.getElementById('header-pedidos').innerHTML = `${usuariosLugo[usuario].nombre}, Estas son tus ordenes`;
     document.getElementById('zona-productos').innerHTML = '';
-    for (let i = 0; i < usuariosLugo[usuarioSeleccionado].ordenes.length; i++) {
+    for (let i = 0; i < usuariosLugo[usuario].ordenes.length; i++) {
         document.getElementById('zona-productos').innerHTML += 
         `
             <p>
-                <h3>${ usuariosLugo[usuarioSeleccionado].ordenes[i].nombreProducto }</h3>
+                <h3>${ usuariosLugo[usuario].ordenes[i].nombreProducto }</h3>
             </p>
             <p style="font-size: 18px;">
-                ${usuariosLugo[usuarioSeleccionado].ordenes[i].descripcion}
+                ${usuariosLugo[usuario].ordenes[i].descripcion}
             </p>
             <p class="ml-auto">
-                <b style="font-size: 25px">$${usuariosLugo[usuarioSeleccionado].ordenes[i].precio}</b>
+                <b style="font-size: 25px">$${usuariosLugo[usuario].ordenes[i].precio}</b>
             </p>
             <hr>
         `;
+        console.log(usuariosLugo[usuario].ordenes[i].nombreProducto);
+        console.log(usuariosLugo[usuario].ordenes[i].descripcion);
+        console.log(usuariosLugo[usuario].ordenes[i].precio);
         
-    }
-    
-    
+    }   
 }
+
 
 // Funcion para Ordenar
 function comprar(codigoCategoria, codigoEmpresa, codigoProducto){
     console.log('Codigo de Categoria', codigoCategoria);
     console.log('Codigo de Empresa', codigoEmpresa);
     console.log('Codigo de Producto', codigoProducto);
+    let nombreProducto = categoryLugo[codigoCategoria].empresas[codigoEmpresa].productos[codigoProducto].nombreProducto;
+    let descripcionProducto = categoryLugo[codigoCategoria].empresas[codigoEmpresa].productos[codigoProducto].descripcion;
+    let valor =   categoryLugo[codigoCategoria].empresas[codigoEmpresa].productos[codigoProducto].precio;
     $('#modalCategorias').modal('hide');
     $('#modalPedidos').modal('show');
     document.getElementById('zona-pedidos').innerHTML = 
     `
-            <h3>${ categoryLugo[codigoCategoria].empresas[codigoEmpresa].productos[codigoProducto].nombreProducto }</h3><br>
-            <p>${ categoryLugo[codigoCategoria].empresas[codigoEmpresa].productos[codigoProducto].descripcion }</p><br>
+            <h3>${ nombreProducto }</h3><br>
+            <p>${ descripcionProducto }</p><br>
             <div class="row">
                 <div class="col-lg-4">
                     Cantidad A Solicitar : 
                 </div>
                 <div class="col-lg-8">
-                    <input type="text" class="form-control" id="txt-cantidad" />    
+                    <input type="number" class="form-control" id="cantidad" />    
                 </div>
             </div>
             <div class="row">
@@ -657,11 +664,12 @@ function comprar(codigoCategoria, codigoEmpresa, codigoProducto){
                     
                 </div>
                 <div class="col-lg-2"><br>
-                <b>$ ${ categoryLugo[codigoCategoria].empresas[codigoEmpresa].productos[codigoProducto].precio }</b>
+                <b>$ ${ valor }</b>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary">
+                <button type="button" onclick="agregarCompra('${nombreProducto}', '${descripcionProducto}', ${valor})"  
+                class="btn btn-secondary">
                 Procesar Orden</button>
             </div>
 
@@ -669,6 +677,58 @@ function comprar(codigoCategoria, codigoEmpresa, codigoProducto){
     `;
 
 }
+// Funcion para agregar un producto nuevo a un usuario
+function agregarCompra (nombreProducto, descripcionProducto, valor) {
+    let cantidad = document.getElementById('cantidad').value;
+    console.log('cantidad', cantidad);
+    console.log('Nombre Producto', nombreProducto);
+    console.log('Descripcion', descripcionProducto);
+    console.log('Valor', valor);
+    let usuario = cambiarUsuario();
+    let ordenCompra = 
+    {
+        nombreProduct: nombreProducto,
+        descripcion: descripcionProducto,
+        cantidad: cantidad,
+        precio: valor * cantidad
+    }
+    console.log('Orden Compra', ordenCompra);
+    usuariosLugo[usuario].ordenes.push(ordenCompra);
+    localStorage.setItem('usuarios', JSON.stringify(usuariosLugo));
+    generarCategoriasLugo();
+    $('#modalPedidos').modal('hide');
+    $('#modalCategorias').modal('hide');
+}
 
+// Funcion para agregar una nueva categoria
+function agregarCategoria(){
+    $('#modalPedidos').modal('hide');
+    $('#modalCategorias').modal('hide');
+    $('#modalCreacionCategoria').modal('show');
+}
+
+// Funcion para guardar
+function guardarCategoria(){
+    console.log('Guardar Categoria');
+    let txtNombre = document.getElementById('txt-nombre').value;
+    let txtDescripcion = document.getElementById('txt-descripcion').value;
+    let txtColor = document.getElementById('txt-color').value;
+    let txtIcono = document.getElementById('txt-icono').value;
+    let categoria = 
+    {
+        nombreCategoria:txtNombre,
+        descripcion:txtDescripcion,
+        color:txtColor,
+        icono: txtIcono,
+        empresas:[]
+    }
+    console.log(categoria);
+    categoryLugo.push(categoria);
+    localStorage.setItem('categorias', JSON.stringify(categoryLugo));
+    generarCategoriasLugo();
+    $('#modalPedidos').modal('hide');
+    $('#modalCategorias').modal('hide');
+    $('#modalCreacionCategoria').modal('hide');
+}
 
 

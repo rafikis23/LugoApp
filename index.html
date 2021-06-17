@@ -30,15 +30,12 @@
                     <option value="">-- Seleccione un usuario --</option>
                 </select>
                 <button class="btn btn-secondary my-2 my-sm-0 mr-2" type="button" onclick="verOrdenes()">Ver Ordenes</button>
-                <button type="button" class="btn btn-secondary my-2 my-sm-0" onclick="crearCategoria()">Agregar Nueva Categoria</button>
+                <button type="button" class="btn btn-secondary my-2 my-sm-0" onclick="agregarCategoria()">Agregar Nueva Categoria</button>
                 </form>
             </div>
         </div>
     </nav>
-    
-    
 
-        
         <main role="main" class="container" style="min-height: 90vh;">
             <div class="row mt-3 text-center mx-auto">
                 <div class="col-lg-6 mx-auto">
@@ -68,29 +65,29 @@
         <!--Modal Detalle Categoria-->
         <div class="modal fade" id="modalCategorias" tabindex="-1" role="dialog" aria-labelledby="modalCategoriasLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog modal-xl" role="document">
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #563D7C;">
-                    <h2 class="modal-title font-weight-bolder text-white" id="header-categorias"></h2>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div class="modal-dialog modal-dialog modal-xl" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header" >
+                            <h2 class="modal-title font-weight-bolder text-white" id="header-categorias"></h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div id="zona-categorias" class="modal-body row">
+            
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
                 </div>
-                <div id="zona-categorias" class="modal-body row">
-    
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
         </div>
         <!---Modal Pedidos de Usuario-->
         <div class="modal fade" id="modalUser" tabindex="-1" role="dialog" aria-labelledby="modalUserLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog modal-xl" role="document">
                 <div class="modal-content">
-                    <div class="modal-header" style="background-color: #563D7C;">
-                        <h2 class="modal-title font-weight-bolder text-white" id="header-productos"></h2>
+                    <div class="modal-header">
+                        <h2 class="modal-title font-weight-bolder text-white" id="header-pedidos"></h2>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -109,22 +106,57 @@
             
         <div class="modal fade my-auto" id="modalPedidos" tabindex="-1" role="dialog" aria-labelledby="modalPedidosLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog modal-xl" role="document">
-            <br><br>
-            <br>
-            <br><br><br><br><br>
-            <div class="modal-content">
-                <div class="modal-header" style="background-color: #563D7C;">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div id="zona-pedidos" class="modal-body">
-        
+            <div class="modal-dialog modal-dialog modal-xl" role="document">
+                <br><br>
+                <br>
+                <br><br><br><br><br>
+                <div class="modal-content">
+                    <div class="modal-header" >
+                        <h2 class="modal-title font-weight-bolder text-white" >Cantidad que desea solicitar</h2>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div id="zona-pedidos" class="modal-body">
+            
+                    </div>
                 </div>
             </div>
         </div>
-        </div>
+                <!--Modal Crear Categoria-->
+                <div class="modal fade my-auto" id="modalCreacionCategoria" tabindex="-1" role="dialog" aria-labelledby="modalCreacionCategoriaLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog modal-lg" role="document">
+                    <br><br>
+                    <br>
+                    <br><br><br><br><br>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2 class="modal-title font-weight-bolder text-white" >Agregar una Nueva Categoria</h2>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div id="zona-pedidos" class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="txt-nombre" placeholder="Ingrese el Nombre de la Categoria">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="txt-descripcion" placeholder="Ingrese una Descripcion">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="txt-color" placeholder="Ingrese el  Color">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="txt-icono" placeholder="Ingrese un Icono">
+                                </div>
+                                <input onclick = " guardarCategoria()" type="button" class="btn btn-secondary" value="Guardar Categoria">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+              </div>
 
     <script src="js/jquery-3.4.1.min.js"></script>
     <script src="js/popper.min.js"></script>
